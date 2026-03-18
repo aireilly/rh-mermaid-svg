@@ -1,6 +1,6 @@
 flowchart LR
     %% Entry
-    HTTP([HTTP]) -.-> APIs
+    HTTP@{ shape: cloud, label: "HTTP" } -.-> APIs
 
     %% API Servers
     subgraph APIs["API Servers (×4)"]

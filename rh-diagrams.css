@@ -66,7 +66,7 @@
 #rh-diagram-svg .cluster-label tspan {
   font-family: "Red Hat Display", RedHatDisplay, Helvetica, Arial, sans-serif;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 700;
   fill: #151515; /* --rh-color-text-primary-on-light */
 }
 
