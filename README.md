@@ -36,7 +36,7 @@ node post-process-svg.mjs out/v1_process_architecture_tp2_dp4.svg
 |------|-------------|
 | `rh-diagrams.css` | Red Hat branded CSS for mermaid SVG output (colors, typography, nodes, edges, clusters) |
 | `mermaid-config.json` | Mermaid configuration — forces native SVG `<text>` elements via `htmlLabels: false` |
-| `post-process-svg.mjs` | Post-processing script — left-aligns cluster labels and sets inner cluster backgrounds/borders to white |
+| `post-process-svg.mjs` | Post-processing script — left-aligns cluster labels, sets inner cluster backgrounds to white, centers cloud labels, adds viewBox padding, and fixes SVG sizing for GitHub |
 | `v1_process_architecture_tp2_dp4.mmd` | Example: vLLM process architecture (TP=2, DP=4) |
 | `v1_process_architecture_tp4.mmd` | Example: vLLM process architecture (TP=4) |
 | `out/` | Generated SVG output |
@@ -53,7 +53,7 @@ node post-process-svg.mjs out/v1_process_architecture_tp2_dp4.svg
 
 The CSS uses colors, typography, and spacing from the [Red Hat Design System](https://ux.redhat.com) (`@rhds/tokens`):
 
-- **Typography**: Red Hat Display (labels/headings), Red Hat Text (body/edges)
+- **Typography**: Red Hat Display (labels/headings, bold for cluster labels), Red Hat Text (body/edges)
 - **Nodes**: Blue-10 fill (`#e0f0ff`), Blue-50 stroke (`#0066cc`)
 - **Edges**: Gray-60 (`#4d4d4d`), 2px stroke
 - **Clusters**: Gray-10 fill (`#f2f2f2`), Gray-30 border (`#c7c7c7`)
@@ -70,6 +70,20 @@ classDef warning fill:#fff4cc,stroke:#dca614,color:#73480b
 classDef info    fill:#ece6ff,stroke:#5e40be,color:#21134d
 classDef neutral fill:#f2f2f2,stroke:#4d4d4d,color:#151515
 classDef brand   fill:#fce3e3,stroke:#ee0000,color:#5f0000
+```
+
+### Node shapes
+
+Mermaid v11+ supports extended shapes via the `@{ shape: ... }` syntax. Useful shapes for architecture diagrams:
+
+```mermaid
+HTTP@{ shape: cloud, label: "HTTP" }
+```
+
+Style cloud nodes with white fill to distinguish them from regular nodes:
+
+```bash
+style HTTP fill:#ffffff,stroke:#4d4d4d
 ```
 
 ### Cluster / subgraph color variants
@@ -99,8 +113,11 @@ style External fill:#e9f7df,stroke:#63993d
 
 The `post-process-svg.mjs` script fixes SVG issues that CSS alone cannot handle:
 
-- **Left-aligned cluster labels** — repositions subgraph labels to the top-left of their container with `text-anchor: start`
-- **Inner cluster styling** — uses geometric containment detection to find nested subgraphs and sets their fill and stroke to white, visually distinguishing them from outer (grey) clusters
+1. **Left-aligned cluster labels** — repositions subgraph labels to the top-left of their container with `text-anchor: start`
+2. **Inner cluster styling** — uses geometric containment detection to find nested subgraphs and sets their fill and stroke to white, visually distinguishing them from outer (grey) clusters
+3. **Centered cloud labels** — fixes a mermaid bug where labels in cloud (path-based) nodes are offset instead of centered
+4. **ViewBox padding** — adds 2% padding to the viewBox edges so content isn't clipped
+5. **GitHub preview sizing** — strips `max-width` and replaces `width="100%"` with explicit pixel dimensions scaled from the viewBox, so GitHub's `<img>` renderer displays SVGs at a reasonable size
 
 Run it after every `mmdc` invocation. It modifies the SVG file in place.
 
@@ -112,6 +129,7 @@ Mermaid is best suited for **simple, schematic diagrams**. Keep these constraint
 - **Connector routing is coarse** — arrow paths are auto-routed. Options are limited to curve styles (`linear`, `step`, `stepBefore`, `stepAfter`). Fine-grained routing (e.g., forcing a connector to exit from a specific edge) is not supported.
 - **Nested subgraphs are flattened in the DOM** — CSS selectors like `.cluster .cluster` don't work because mermaid renders all clusters as siblings. Geometric post-processing is required to distinguish inner from outer clusters.
 - **No native left-alignment for cluster labels** — labels are always centered; post-processing is needed to reposition them.
+- **Cloud shape label centering** — mermaid's cloud shape (`@{ shape: cloud }`) offsets the label incorrectly; post-processing is needed to center it.
 - **Complex diagrams degrade quickly** — diagrams with many cross-connections, fan-out patterns, or deep nesting produce cluttered, hard-to-read layouts. If a diagram requires more than ~15–20 nodes or multiple levels of nesting, consider splitting it into separate diagrams or using a dedicated diagramming tool.
 - **`htmlLabels: false` is required for portable SVGs** — without this flag, mermaid wraps labels in `<foreignObject>` elements that don't render in many SVG viewers. This disables HTML formatting (bold, italic, links) inside node labels.
 

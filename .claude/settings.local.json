@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mmdc -i v1_process_architecture_tp2_dp4.mmd -o out/v1_process_architecture_tp2_dp4.svg -C rh-diagrams.css -c mermaid-config.json -I rh-diagram-svg)",
+      "Bash(node post-process-svg.mjs out/v1_process_architecture_tp2_dp4.svg)",
+      "Bash(inkscape out/v1_process_architecture_tp4.svg --export-type=png --export-filename=out/v1_process_architecture_tp4.png --export-dpi=128 --export-width=1013 --export-height=693)",
+      "Bash(inkscape out/v1_process_architecture_tp2_dp4.svg --export-type=png --export-filename=out/v1_process_architecture_tp2_dp4.png --export-dpi=128 --export-width=1013 --export-height=693)",
+      "Bash(identify out/v1_process_architecture_tp4.png out/v1_process_architecture_tp2_dp4.png)"
+    ]
+  }
+}

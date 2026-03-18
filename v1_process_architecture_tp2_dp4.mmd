@@ -19,7 +19,7 @@ flowchart LR
     DPC -.-> ECs
 
     %% Engine Cores
-    subgraph ECs["Engine Cores (×4, DP=4)"]
+    subgraph ECs["Engine Cores (×4, DP=4)\n\n"]
         direction TB
         subgraph DP0["DP Rank 0"]
             EC0["Engine Core 0"]
@@ -63,11 +63,11 @@ flowchart LR
     EC2 -.-> GW2G
     EC3 -.-> GW3G
 
-    style HTTP fill:#ffffff,stroke:#4d4d4d
-
     %% Cluster colors
     %% style APIs fill:#e0f0ff,stroke:#0066cc
     %% style GW0G fill:#e9f7df,stroke:#63993d
     %% style GW1G fill:#e9f7df,stroke:#63993d
     %% style GW2G fill:#e9f7df,stroke:#63993d
     %% style GW3G fill:#e9f7df,stroke:#63993d
+    style HTTP fill:#ffffff,stroke:#4d4d4d;
+    style DPC fill:#e9f7df,stroke:#3d7317;

@@ -30,7 +30,7 @@
 /* Base SVG font */
 #rh-diagram-svg {
   font-family: "Red Hat Text", RedHatText, Helvetica, Arial, sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   fill: #151515; /* --rh-color-text-primary-on-light */
 }
 
@@ -39,8 +39,8 @@
 #rh-diagram-svg .node .label text,
 #rh-diagram-svg .node text {
   font-family: "Red Hat Display", RedHatDisplay, Helvetica, Arial, sans-serif;
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 600;
   fill: #151515; /* --rh-color-text-primary-on-light */
 }
 
@@ -49,8 +49,8 @@
 #rh-diagram-svg .edgeLabel text,
 #rh-diagram-svg .edgeLabel tspan {
   font-family: "Red Hat Text", RedHatText, Helvetica, Arial, sans-serif;
-  font-size: 12px;
-  font-weight: 400;
+  font-size: 20px;
+  font-weight: 500;
   fill: #4d4d4d; /* --rh-color-text-secondary-on-light */
 }
 
@@ -65,7 +65,7 @@
 #rh-diagram-svg .cluster-label text,
 #rh-diagram-svg .cluster-label tspan {
   font-family: "Red Hat Display", RedHatDisplay, Helvetica, Arial, sans-serif;
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 700;
   fill: #151515; /* --rh-color-text-primary-on-light */
 }
@@ -73,7 +73,7 @@
 /* Title text */
 #rh-diagram-svg .flowchartTitleText {
   font-family: "Red Hat Display", RedHatDisplay, Helvetica, Arial, sans-serif;
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 700;
   fill: #151515; /* --rh-color-text-primary-on-light */
 }
@@ -151,7 +151,7 @@
 #rh-diagram-svg .cluster rect {
   fill: #f2f2f2; /* --rh-color-gray-10 */
   stroke: #c7c7c7; /* --rh-color-gray-30 */
-  stroke-width: 1px;
+  stroke-width: 2px;
 }
 
 
@@ -229,7 +229,7 @@
 
 #rh-diagram-svg div.mermaidTooltip {
   font-family: "Red Hat Text", RedHatText, Helvetica, Arial, sans-serif;
-  font-size: 12px;
+  font-size: 16px;
   background: #ffffff;
   border: 1px solid #c7c7c7; /* --rh-color-gray-30 */
   border-radius: 3px; /* --rh-border-radius-default */
