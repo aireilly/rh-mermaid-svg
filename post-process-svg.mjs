@@ -2,7 +2,9 @@
 // Post-process mermaid SVG:
 //   1. Left-align cluster/subgraph labels
 //   2. Set inner (nested) cluster backgrounds to white
-//   3. Fix SVG sizing for GitHub preview (remove max-width, set explicit dimensions)
+//   3. Center labels in cloud (path-based) nodes
+//   4. Add 5% padding to viewBox edges
+//   5. Fix SVG sizing for GitHub preview (remove max-width, set explicit dimensions)
 // Usage: node fix-cluster-labels.mjs <svg-file>
 
 import { readFileSync, writeFileSync } from 'fs';
@@ -98,7 +100,39 @@ if (innerOffsets.size > 0) {
   );
 }
 
-// --- Step 3: Fix SVG sizing for GitHub preview ---
+// --- Step 3: Center labels in cloud (path-based) nodes ---
+// Mermaid's cloud shape offsets the label for text-anchor:start, but CSS
+// overrides to text-anchor:middle, causing misalignment. Fix by zeroing
+// the label group's x translate.
+
+svg = svg.replace(
+  /(<g\s+class="node[^"]*"[^>]*>)<path\b[^>]*class="basic label-container"[^>]*\/?>.*?(<g\s+class="label"[^>]*transform="translate\()[-\d.]+,\s*([-\d.]+)\)/gs,
+  (match, nodeOpen, labelBefore, y) => {
+    return match.replace(
+      /(<g\s+class="label"[^>]*transform="translate\()[-\d.]+,\s*([-\d.]+)\)/,
+      `$1 0, $2)`
+    );
+  }
+);
+
+// --- Step 4: Add 5% padding to viewBox edges ---
+
+svg = svg.replace(
+  /viewBox="([-\d.]+)\s+([-\d.]+)\s+([\d.]+)\s+([\d.]+)"/,
+  (match, minX, minY, w, h) => {
+    const width = parseFloat(w);
+    const height = parseFloat(h);
+    const padX = width * 0.05;
+    const padY = height * 0.05;
+    const newMinX = parseFloat(minX) - padX;
+    const newMinY = parseFloat(minY) - padY;
+    const newW = width + padX * 2;
+    const newH = height + padY * 2;
+    return `viewBox="${newMinX} ${newMinY} ${newW} ${newH}"`;
+  }
+);
+
+// --- Step 5: Fix SVG sizing for GitHub preview ---
 // Remove max-width from inline style and set an explicit width so GitHub's
 // <img> renderer displays the SVG at a reasonable size.
 
@@ -113,8 +147,8 @@ svg = svg.replace(
 svg = svg.replace(
   /(<svg[^>]*?)\s+width="100%"/s,
   (match, before) => {
-    // Extract the viewBox width and scale up
-    const vbMatch = svg.match(/viewBox="[\d.\-]+\s+[\d.\-]+\s+([\d.]+)\s+([\d.]+)"/);
+    // Extract the (already padded) viewBox width and scale up
+    const vbMatch = svg.match(/viewBox="[-\d.]+\s+[-\d.]+\s+([\d.]+)\s+([\d.]+)"/);
     if (vbMatch) {
       const vbWidth = parseFloat(vbMatch[1]);
       const vbHeight = parseFloat(vbMatch[2]);
