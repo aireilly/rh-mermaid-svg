@@ -1,0 +1,237 @@
+/*
+ * Red Hat Technical Diagram Styles for Mermaid SVG
+ *
+ * Based on:
+ *   - CCS "Working with technical diagrams" guidelines
+ *   - Red Hat Design System tokens (@rhds/tokens v3.0.2)
+ *
+ * Usage: mmdc -i input.mmd -o output.svg -C rh-diagrams.css -c mermaid-config.json -I rh-diagram-svg
+ *
+ * Note: All selectors use #rh-diagram-svg prefix to override mermaid's
+ * built-in ID-scoped styles which have higher specificity than
+ * class-only selectors. Pass -I rh-diagram-svg to mmdc to set the SVG ID.
+ */
+
+/* ============================================================
+ * TYPOGRAPHY
+ * Red Hat Display for labels/headings, Red Hat Text for body
+ * ============================================================ */
+
+/* Color tokens for use in .mmd style statements */
+#rh-diagram-svg {
+  --rh-blue-fill: #e0f0ff;    /* blue-10 */
+  --rh-blue-stroke: #0066cc;  /* blue-50 */
+  --rh-green-fill: #e9f7df;   /* green-10 */
+  --rh-green-stroke: #63993d; /* green-50 */
+  --rh-gray-fill: #f2f2f2;    /* gray-10 */
+  --rh-gray-stroke: #c7c7c7;  /* gray-30 */
+}
+
+/* Base SVG font */
+#rh-diagram-svg {
+  font-family: "Red Hat Text", RedHatText, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  fill: #151515; /* --rh-color-text-primary-on-light */
+}
+
+/* Node labels */
+#rh-diagram-svg .nodeLabel,
+#rh-diagram-svg .node .label text,
+#rh-diagram-svg .node text {
+  font-family: "Red Hat Display", RedHatDisplay, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  fill: #151515; /* --rh-color-text-primary-on-light */
+}
+
+/* Edge labels */
+#rh-diagram-svg .edgeLabel,
+#rh-diagram-svg .edgeLabel text,
+#rh-diagram-svg .edgeLabel tspan {
+  font-family: "Red Hat Text", RedHatText, Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  fill: #4d4d4d; /* --rh-color-text-secondary-on-light */
+}
+
+/* Edge label background */
+#rh-diagram-svg .edgeLabel rect.background,
+#rh-diagram-svg .edgeLabel .background {
+  fill: #ffffff; /* --rh-color-surface-lightest */
+  opacity: 0.9;
+}
+
+/* Cluster/subgraph labels */
+#rh-diagram-svg .cluster-label text,
+#rh-diagram-svg .cluster-label tspan {
+  font-family: "Red Hat Display", RedHatDisplay, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  fill: #151515; /* --rh-color-text-primary-on-light */
+}
+
+/* Title text */
+#rh-diagram-svg .flowchartTitleText {
+  font-family: "Red Hat Display", RedHatDisplay, Helvetica, Arial, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  fill: #151515; /* --rh-color-text-primary-on-light */
+}
+
+/* Generic label styling */
+#rh-diagram-svg .label {
+  font-family: "Red Hat Text", RedHatText, Helvetica, Arial, sans-serif;
+  color: #151515;
+}
+
+#rh-diagram-svg .label text,
+#rh-diagram-svg span {
+  fill: #151515; /* --rh-color-text-primary-on-light */
+  color: #151515;
+}
+
+/* ============================================================
+ * NODES — Primary style
+ * Light blue fill, RH blue border
+ * ============================================================ */
+
+#rh-diagram-svg .node rect,
+#rh-diagram-svg .node circle,
+#rh-diagram-svg .node ellipse,
+#rh-diagram-svg .node polygon,
+#rh-diagram-svg .node path {
+  fill: #e0f0ff; /* --rh-color-blue-10 */
+  stroke: #0066cc; /* --rh-color-blue-50 */
+  stroke-width: 1px; /* --rh-border-width-sm */
+}
+
+/* ============================================================
+ * EDGES — Lines & arrows
+ * Gray-60 for connectors, 2px stroke
+ * ============================================================ */
+
+#rh-diagram-svg .edgePath .path,
+#rh-diagram-svg .flowchart-link {
+  stroke: #4d4d4d; /* --rh-color-gray-60 */
+  stroke-width: 2px; /* --rh-border-width-md */
+}
+
+#rh-diagram-svg .edge-pattern-dotted {
+  stroke-dasharray: 3;
+}
+
+#rh-diagram-svg .edge-pattern-dashed {
+  stroke-dasharray: 6;
+}
+
+/* Arrow markers */
+#rh-diagram-svg .marker {
+  fill: #4d4d4d; /* --rh-color-gray-60 */
+  stroke: #4d4d4d;
+}
+
+#rh-diagram-svg .marker.cross {
+  stroke: #4d4d4d;
+}
+
+#rh-diagram-svg .arrowheadPath {
+  fill: #4d4d4d;
+}
+
+#rh-diagram-svg .arrowMarkerPath {
+  fill: #4d4d4d;
+  stroke: #4d4d4d;
+}
+
+/* ============================================================
+ * GROUPINGS — Cluster/subgraph containers
+ * Subtle gray background, light border
+ * ============================================================ */
+
+#rh-diagram-svg .cluster rect {
+  fill: #f2f2f2; /* --rh-color-gray-10 */
+  stroke: #c7c7c7; /* --rh-color-gray-30 */
+  stroke-width: 1px;
+}
+
+
+#rh-diagram-svg .cluster text {
+  fill: #151515;
+}
+
+#rh-diagram-svg .cluster span {
+  color: #151515;
+}
+
+/* ============================================================
+ * STATUS / SEMANTIC NODE VARIANTS
+ * Apply via classDef in .mmd files:
+ *
+ *   classDef success fill:#e9f7df,stroke:#3d7317,color:#204d00
+ *   classDef danger fill:#ffe3d9,stroke:#b1380b,color:#731f00
+ *   classDef warning fill:#fff4cc,stroke:#dca614,color:#73480b
+ *   classDef info fill:#ece6ff,stroke:#5e40be,color:#21134d
+ *   classDef neutral fill:#f2f2f2,stroke:#4d4d4d,color:#151515
+ *   classDef brand fill:#fce3e3,stroke:#ee0000,color:#5f0000
+ * ============================================================ */
+
+/* Success */
+#rh-diagram-svg .node.success rect,
+#rh-diagram-svg .node.success polygon {
+  fill: #e9f7df; /* --rh-color-green-10 */
+  stroke: #3d7317; /* --rh-color-green-60 */
+}
+#rh-diagram-svg .node.success .nodeLabel { fill: #204d00; }
+
+/* Danger */
+#rh-diagram-svg .node.danger rect,
+#rh-diagram-svg .node.danger polygon {
+  fill: #ffe3d9; /* --rh-color-red-orange-10 */
+  stroke: #b1380b; /* --rh-color-red-orange-60 */
+}
+#rh-diagram-svg .node.danger .nodeLabel { fill: #731f00; }
+
+/* Warning */
+#rh-diagram-svg .node.warning rect,
+#rh-diagram-svg .node.warning polygon {
+  fill: #fff4cc; /* --rh-color-yellow-10 */
+  stroke: #dca614; /* --rh-color-yellow-40 */
+}
+#rh-diagram-svg .node.warning .nodeLabel { fill: #73480b; }
+
+/* Info */
+#rh-diagram-svg .node.info rect,
+#rh-diagram-svg .node.info polygon {
+  fill: #ece6ff; /* --rh-color-purple-10 */
+  stroke: #5e40be; /* --rh-color-purple-50 */
+}
+#rh-diagram-svg .node.info .nodeLabel { fill: #21134d; }
+
+/* Neutral */
+#rh-diagram-svg .node.neutral rect,
+#rh-diagram-svg .node.neutral polygon {
+  fill: #f2f2f2; /* --rh-color-gray-10 */
+  stroke: #4d4d4d; /* --rh-color-gray-60 */
+}
+#rh-diagram-svg .node.neutral .nodeLabel { fill: #151515; }
+
+/* Brand (Red Hat red) */
+#rh-diagram-svg .node.brand rect,
+#rh-diagram-svg .node.brand polygon {
+  fill: #fce3e3; /* --rh-color-red-10 */
+  stroke: #ee0000; /* --rh-color-red-50 */
+}
+#rh-diagram-svg .node.brand .nodeLabel { fill: #5f0000; }
+
+/* ============================================================
+ * TOOLTIP
+ * ============================================================ */
+
+#rh-diagram-svg div.mermaidTooltip {
+  font-family: "Red Hat Text", RedHatText, Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  background: #ffffff;
+  border: 1px solid #c7c7c7; /* --rh-color-gray-30 */
+  border-radius: 3px; /* --rh-border-radius-default */
+  color: #151515;
+}

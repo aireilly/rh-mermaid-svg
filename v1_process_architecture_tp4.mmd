@@ -1,0 +1,20 @@
+flowchart TB
+    HTTP([HTTP]) --> API
+
+    API["API Server Input Processing, Tokenization, Streaming"]
+
+    API <-.->|"ZMQ"| EC
+
+    EC["Engine Core Scheduler, KV Cache Manager"]
+
+    subgraph TP["TP Group (TP=4)"]
+        GW0["GPU Worker 0 GPU 0"]
+        GW1["GPU Worker 1 GPU 1"]
+        GW2["GPU Worker 2 GPU 2"]
+        GW3["GPU Worker 3 GPU 3"]
+    end
+
+    EC -.-> TP
+
+    %% Cluster colors
+    %% style TP fill:#e0f0ff,stroke:#0066cc

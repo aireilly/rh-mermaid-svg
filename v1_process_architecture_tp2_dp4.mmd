@@ -1,0 +1,71 @@
+flowchart LR
+    %% Entry
+    HTTP([HTTP]) -.-> APIs
+
+    %% API Servers
+    subgraph APIs["API Servers (×4)"]
+        direction TB
+        API0["API Server 0"]
+        API1["API Server 1"]
+        API2["API Server 2"]
+        API3["API Server 3"]
+    end
+
+    %% Single labeled ZMQ connection between subgraphs
+    APIs <-.->|"ZMQ"| ECs
+
+    %% DP Coordinator
+    DPC["DP Coordinator\nLoad Balancing"]
+    DPC -.-> ECs
+
+    %% Engine Cores
+    subgraph ECs["Engine Cores (×4, DP=4)"]
+        direction TB
+        subgraph DP0["DP Rank 0"]
+            EC0["Engine Core 0"]
+        end
+        subgraph DP1["DP Rank 1"]
+            EC1["Engine Core 1"]
+        end
+        subgraph DP2["DP Rank 2"]
+            EC2["Engine Core 2"]
+        end
+        subgraph DP3["DP Rank 3"]
+            EC3["Engine Core 3"]
+        end
+    end
+
+    %% GPU Workers
+    classDef success fill:#e9f7df,stroke:#3d7317,color:#204d00
+    subgraph GW0G["TP Group 0"]
+        direction TB
+        GW0["GPU Worker 0\nGPU 0"]
+        GW1["GPU Worker 1\nGPU 1"]
+    end
+    subgraph GW1G["TP Group 1"]
+        direction TB
+        GW2["GPU Worker 2\nGPU 2"]
+        GW3["GPU Worker 3\nGPU 3"]
+    end
+    subgraph GW2G["TP Group 2"]
+        direction TB
+        GW4["GPU Worker 4\nGPU 4"]
+        GW5["GPU Worker 5\nGPU 5"]
+    end
+    subgraph GW3G["TP Group 3"]
+        direction TB
+        GW6["GPU Worker 6\nGPU 6"]
+        GW7["GPU Worker 7\nGPU 7"]
+    end
+
+    EC0 -.-> GW0G
+    EC1 -.-> GW1G
+    EC2 -.-> GW2G
+    EC3 -.-> GW3G
+
+    %% Cluster colors
+    %% style APIs fill:#e0f0ff,stroke:#0066cc
+    %% style GW0G fill:#e9f7df,stroke:#63993d
+    %% style GW1G fill:#e9f7df,stroke:#63993d
+    %% style GW2G fill:#e9f7df,stroke:#63993d
+    %% style GW3G fill:#e9f7df,stroke:#63993d

@@ -1,0 +1,9 @@
+{
+  "theme": "default",
+  "htmlLabels": false,
+  "flowchart": {
+    "htmlLabels": false,
+    "useMaxWidth": true,
+    "curve": "linear"
+  }
+}
