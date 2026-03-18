@@ -2,6 +2,7 @@
 // Post-process mermaid SVG:
 //   1. Left-align cluster/subgraph labels
 //   2. Set inner (nested) cluster backgrounds to white
+//   3. Fix SVG sizing for GitHub preview (remove max-width, set explicit dimensions)
 // Usage: node fix-cluster-labels.mjs <svg-file>
 
 import { readFileSync, writeFileSync } from 'fs';
@@ -97,5 +98,34 @@ if (innerOffsets.size > 0) {
   );
 }
 
+// --- Step 3: Fix SVG sizing for GitHub preview ---
+// Remove max-width from inline style and set an explicit width so GitHub's
+// <img> renderer displays the SVG at a reasonable size.
+
+svg = svg.replace(
+  /(<svg[^>]*?)(\s+style="[^"]*")/s,
+  (match, before, styleAttr) => {
+    const cleaned = styleAttr.replace(/max-width:\s*[^;]+;?\s*/g, '');
+    return `${before}${cleaned}`;
+  }
+);
+
+svg = svg.replace(
+  /(<svg[^>]*?)\s+width="100%"/s,
+  (match, before) => {
+    // Extract the viewBox width and scale up
+    const vbMatch = svg.match(/viewBox="[\d.\-]+\s+[\d.\-]+\s+([\d.]+)\s+([\d.]+)"/);
+    if (vbMatch) {
+      const vbWidth = parseFloat(vbMatch[1]);
+      const vbHeight = parseFloat(vbMatch[2]);
+      const scale = Math.max(1, Math.min(1200 / vbWidth, 4));
+      const width = Math.round(vbWidth * scale);
+      const height = Math.round(vbHeight * scale);
+      return `${before} width="${width}" height="${height}"`;
+    }
+    return `${before} width="1200"`;
+  }
+);
+
 writeFileSync(file, svg);
-console.log(`Fixed cluster labels and inner backgrounds in ${file}`);
+console.log(`Fixed cluster labels, inner backgrounds, and SVG sizing in ${file}`);
